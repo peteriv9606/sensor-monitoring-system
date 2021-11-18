@@ -55,7 +55,7 @@ To start the server...
 
 *Make sure you start the backend first*
 
-Once in frontend directory, after using ```> yarn install``` to install node modules, run ```> yarn dev``` to run the server. 
+Once in frontend directory, after using ```> yarn install``` to install node modules, run ```> yarn dev``` to run the server in development mode. 
 Server should be running on [http://localhost:3000/](http://localhost:3000/).
 
 Frontend is pretty straight-forward, containing only 2 pages - index page and sensor details page.
