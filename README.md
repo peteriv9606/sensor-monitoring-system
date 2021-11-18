@@ -31,20 +31,21 @@ examples:
 
 ### Routes
 
-Backend provides 2 types of routes:
-  Regular Endpoints:
+Server provides 2 types of routes:
+
+#### Regular Endpoints:
     
     - GET http://localhost:4000/api/sensors/ - retrieves data for all sensors (both active and inactive)
     - GET http://localhost:4000/api/sensors/:id - retrieves data for a single sensor (id, name, isActive, data (the randomly generated data from the sensor))
     - PUT http://localhost:4000/api/sensors/:id - toggles the sensor's isActive state
   
-  WebSocket:
+#### WebSocket:
   
     - http://localhost:4000/sensors/:id/data - a websocket to a single sensor
+     
+Once connected as a client using this websocket, (if the sensor is up and running) you can listen for two events:
     
-  Once connected as a client using this websocket, (if the sensor is up and running) you can listen for two events:
-    
-      - web_sensorStatusUpdate - all current sensor statuses from db (active/inactive) 
-      - web_getSensorsData - the randomly generated data from this particular sensor
+    - web_sensorStatusUpdate - all current sensor statuses from db (active/inactive) 
+    - web_getSensorsData - the randomly generated data from this particular sensor
      
 ## Frontend
