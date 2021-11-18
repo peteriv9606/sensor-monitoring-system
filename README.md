@@ -3,14 +3,14 @@
 ## Let's build and run this:
 
 1. Clone repo
-2. cd to frontend and install using ```>yarn install```
-3. cd to backend and install using ```>yarn install```
+2. cd to frontend and install using ```> yarn install```
+3. cd to backend and install using ```> yarn install```
 
 ## Backend
 
 1. To start the server...
 
-Once in backend directory, after using ```>yarn install``` to install node modules, run ```>yarn start``` to run the server. 
+Once in backend directory, after using ```> yarn install``` to install node modules, run ```> yarn start``` to run the server. 
 Server should be running on (http://localhost:4000)[http://localhost:4000].
 
 I have provided some sensor data within db.sqlite3 for 2 sensors:
@@ -20,13 +20,13 @@ I have provided some sensor data within db.sqlite3 for 2 sensors:
 
 2. Run sensor
 
-Using ```>node sensor.js <sensor_id> <sensor_name>``` initiates a new instance of a sensor, connects to the server using Socket.io, and starts emitting randomly generated data.
+```> node sensor.js <sensor_id> <sensor_name>``` initiates a new instance of a sensor, connects to the server using Socket.io, and starts emitting randomly generated data.
 
 examples:
 
- ```>node sensor.js 200 'Sensor 200'``` - Starts a sensor with id of 200 and a name of Sensor 200. 
+ ```> node sensor.js 200 'Sensor 200'``` - Starts a sensor with id of 200 and a name of Sensor 200. 
  
- ```>node sensor.js 5538ABCD 'Sensor 5538ABCD'``` - Starts a sensor with id of 5538ABCD and a name of Sensor 5538ABCD.
+ ```> node sensor.js 5538ABCD 'Sensor 5538ABCD'``` - Starts a sensor with id of 5538ABCD and a name of Sensor 5538ABCD.
  
 
 ### Routes
