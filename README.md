@@ -23,7 +23,9 @@ I have provided some sensor data within db.sqlite3 for 2 sensors:
 Using ```>node sensor.js <sensor_id> <sensor_name>``` initiates a new instance of a sensor, connects to the server using Socket.io, and starts emitting randomly generated data.
 
 examples:
+
  ```>node sensor.js 200 'Sensor 200'``` - Starts a sensor with id of 200 and a name of Sensor 200. 
+ 
  ```>node sensor.js 5538ABCD 'Sensor 5538ABCD'``` - Starts a sensor with id of 5538ABCD and a name of Sensor 5538ABCD.
  
 
@@ -40,7 +42,7 @@ Backend provides 2 types of routes:
   
     - http://localhost:4000/sensors/:id/data - a websocket to a single sensor
     
-    Once connected as a client using this websocket, (if the sensor is up and running) you can listen for two events:
+  Once connected as a client using this websocket, (if the sensor is up and running) you can listen for two events:
     
       - web_sensorStatusUpdate - all current sensor statuses from db (active/inactive) 
       - web_getSensorsData - the randomly generated data from this particular sensor
