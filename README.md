@@ -14,8 +14,9 @@ Once in backend directory, after using ```> yarn install``` to install node modu
 Server should be running on (http://localhost:4000)[http://localhost:4000].
 
 I have provided some sensor data within db.sqlite3 for 2 sensors:
-  #1 sensor_id: 200, sensor_name: Sensor 200
-  #2 sensor_id: 5538ABCD sensor_name: Sensor 5538ABCD
+    
+    - #1 sensor_id: 200, sensor_name: Sensor 200
+    - #2 sensor_id: 5538ABCD sensor_name: Sensor 5538ABCD
 
 
 2. Run sensor
