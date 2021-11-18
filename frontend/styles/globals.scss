@@ -451,8 +451,6 @@ textarea {
 .Shell {
   display: flex;
   flex-direction: column;
-  
-  height: 100vh;
   padding: 0 16px;
   box-sizing: border-box;
   @media (min-width: 768px) {
@@ -466,5 +464,23 @@ textarea {
   @media (min-width: 1441px) {
     padding: 0 24px;
     max-width: 1200px;
+  }
+}
+
+.Content_wrapper {
+  width: 100%;
+  margin: 50px auto;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 20px 40px;
+  box-sizing: border-box;
+
+  > h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: 26px;
   }
 }

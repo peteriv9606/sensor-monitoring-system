@@ -1,0 +1,50 @@
+.Sensor_details {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  border-bottom: 1px solid #ccc;
+
+  > h2 {
+    font-size: 18px;
+  }
+}
+
+svg.Power {
+  margin-right: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+svg.On {
+  color: red;
+}
+
+svg.Off {
+  color: green;
+}
+
+.Readings {
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-evenly;
+  border-bottom: 1px solid #ccc;
+  font-size: 18px;
+
+  > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.Readings.Inactive {
+  color: #888;
+  font-style: italic;
+}
