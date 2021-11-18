@@ -39,8 +39,12 @@ sensorNamespace.on('connection', (socket) => {
     `, [data.id, data.name, 1, socket.id], (err) => {
       if (err) {
         // sensor already in DB
-      }else{
-        socket.broadcast.emit('web_sensorStatusUpdate', {id: data.id, isActive: 1})
+      } else {
+        db.all("SELECT * FROM sensors", [], (err, rows) => {
+          if (!err) {
+            socket.broadcast.emit('web_sensorStatusUpdate', rows)
+          }
+        })
       }
     })
   })
@@ -55,17 +59,22 @@ sensorNamespace.on('connection', (socket) => {
     db.get(query, params, (err, sensor) => {
       if (!err) {
         if (sensor?.isActive) {
+          let insert_data = [data.id, data.temperature, data.humidity, Date.now()]
           // persist data into db & emit to client
           db.run(`INSERT INTO 
                   data (sensor_id, temperature, humidity, created_at) 
                   VALUES (?, ?, ?, ?)
-          `, [
-            data.id, data.temperature, data.humidity, new Date()], (err) => {
+          `, [insert_data], (err) => {
               if (!err) {
                 // console.log('inserted into db')
 
                 // and send to clients if any
-                socket.broadcast.emit('web_getSensorsData', data)
+                socket.broadcast.emit('web_getSensorsData', {
+                  id: insert_data[0],
+                  temperature: insert_data[1],
+                  humidity: insert_data[2],
+                  created_at: insert_data[3]
+                })
               }
             })
         }
@@ -75,7 +84,11 @@ sensorNamespace.on('connection', (socket) => {
 
   socket.on('sensorStatusUpdate', (data) => {
     console.log("sensorStatusUpdate", data)
-    socket.broadcast.emit('web_sensorStatusUpdate', data)
+    db.all("SELECT * FROM sensors", [], (err, rows) => {
+      if (!err) {
+        socket.broadcast.emit('web_sensorStatusUpdate', rows)
+      }
+    })
   })
 
   socket.on('disconnect', () => {
@@ -88,12 +101,18 @@ sensorNamespace.on('connection', (socket) => {
     SET isActive = 0, onSocket = ''
     WHERE onSocket = ?;
     `, [socket.id], (err) => {
-      if (err) {
-        console.log(err)
+      if (!err) {
+        db.all("SELECT * FROM sensors", [], (err, rows) => {
+          if (!err) {
+            socket.broadcast.emit('web_sensorStatusUpdate', rows)
+          }
+        })
       }
     })
   })
 })
+
+
 
 // ************************ regular endpoints ************************
 

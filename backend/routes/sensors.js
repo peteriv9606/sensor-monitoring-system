@@ -11,7 +11,7 @@ router.get("/sensors", (req, res, next) => {
     if (err) {
       return res.status(400).json({ "error": err.message })
     }
-    return res.status(200).json({ count: rows.length, requested_at: new Date(), data: rows })
+    return res.status(200).json({ count: rows.length, requested_at: Date.now(), data: rows })
   })
 })
 
@@ -43,7 +43,7 @@ router.get("/sensors/:id", (req, res, next) => {
         name: rows[0].name,
         isActive: rows[0].isActive,
         count: rows.length,
-        requested_at: new Date(),
+        requested_at: Date.now(),
         data: results
       })
     }
@@ -70,7 +70,7 @@ router.put('/sensors/:id', (req, res) => {
           socket.disconnect()
         })
 
-        return res.send(`Sensor (${req.params.id}) ${!sensor.isActive ? 'enabled' : 'disabled'}`)
+        return res.status(200).json({'id': req.params.id, 'isActive': !sensor.isActive })
       })
   })
 })
