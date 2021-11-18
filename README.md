@@ -3,8 +3,8 @@
 ## Let's build and run this:
 
 1. Clone repo
-2. cd to frontend and install using ```> yarn install```
-3. cd to backend and install using ```> yarn install```
+2. ```> cd frontend``` and install node modules using ```> yarn install```
+3. ```> cd backend``` and install node modules using ```> yarn install```
 
 ## Backend
 
