@@ -20,6 +20,7 @@ export default function Home({ sensorsSSR }) {
 
   useEffect(() => {
     let sensors = sensorsData?.data
+    
     if (sensors) {
       sensors.map((sensor) => {
         const conn = io(`http://localhost:4000/sensors/${sensor.sensor_id}/data/`, {
@@ -28,15 +29,14 @@ export default function Home({ sensorsSSR }) {
         conn.on('connect', () => {
           console.log("Web client connected to ws server! Sensor ID: ", sensor.sensor_id)
 
-          conn.on('web_sensorStatusUpdate', (data) => {
-            console.log('SensorStatusUpdate', data)
-            let sData = sensorsData.data
-            sData.filter((s) => s.sensor_id == data.id)[0].isActive = Boolean(data.isActive)
+          conn.on('web_sensorStatusUpdate', (sdata) => {
+            console.log('SensorStatusUpdate', sdata)
+        
             setSensorsData({
               ...sensorsData,
               requested_at: new Date().toISOString(),
-              data: sData
-            })
+              data: sdata
+            }) 
           })
         })
 
@@ -78,11 +78,9 @@ export default function Home({ sensorsSSR }) {
                 {
                   sensorsData.data.map((sensor) =>
                     <a key={sensor.sensor_id} className={styles.Sensor} href={`/sensor/${sensor.sensor_id}`}>
-                      <span className={`${styles.Sensor_status} ${sensor.onSocket ?
-                        sensor.isActive ? styles.Enabled : styles.Disabled
-                        : styles.Inactive}`} title={sensor.onSocket ?
-                          sensor.isActive ? 'Active' : 'Inactive'
-                          : 'Not Connected'}></span>
+                      <span
+                        className={`${styles.Sensor_status} ${sensor.isActive ? styles.Enabled : styles.Disabled}`}
+                        title={sensor.isActive ? 'Active' : 'Inactive'}></span>
                       <p>{sensor.sensor_id}</p>
                       <p>{sensor.name}</p>
                     </a>

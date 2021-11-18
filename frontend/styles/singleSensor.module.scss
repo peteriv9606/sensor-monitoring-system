@@ -1,0 +1,73 @@
+.Content_wrapper {
+  min-width: 450px;
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 20px 40px;
+  box-sizing: border-box;
+
+  > h1 {
+    text-align: center;
+    margin-bottom: 10px;
+    font-weight: 700;
+    font-size: 26px;
+  }
+}
+
+.Charts_wrapper {
+  min-width: 700px;
+  
+}
+
+.Sensor_details {
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 50px;
+  border-bottom: 1px solid #ccc;
+
+  > h2 {
+    font-size: 18px;
+  }
+}
+
+svg.Power {
+  margin-right: 5px;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+svg.On {
+  color: red;
+}
+
+svg.Off {
+  color: green;
+}
+
+.Readings {
+  padding-bottom: 5px;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-evenly;
+  border-bottom: 1px solid #ccc;
+  font-size: 18px;
+
+  > span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.Readings.Inactive {
+  color: #888;
+  font-style: italic;
+}

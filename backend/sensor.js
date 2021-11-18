@@ -13,6 +13,12 @@ socket.on('connect', () => {
 
   socket.emit('sensorInit', { id, name })
 
+  socket.emit('sensorDataUpdate', {
+    id,
+    temperature: Math.floor(Math.random() * (50 - 40) + 40),
+    humidity: Math.floor(Math.random() * (10 - 0) + 0)
+  });
+
   setInterval(() => {
     // simulate changes in temperature of sensor
     socket.emit('sensorDataUpdate', {
