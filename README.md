@@ -11,7 +11,7 @@
 1. To start the server...
 
 Once in backend directory, after using ```> yarn install``` to install node modules, run ```> yarn start``` to run the server. 
-Server should be running on (http://localhost:4000)[http://localhost:4000].
+Server should be running on [http://localhost:4000/](http://localhost:4000/).
 
 I have provided some sensor data within db.sqlite3 for 2 sensors:
     
