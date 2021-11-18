@@ -50,3 +50,29 @@ Once connected as a client using this websocket, (if the sensor is up and runnin
     - web_getSensorsData - the randomly generated data from this particular sensor
      
 ## Frontend
+
+1. To start the server...
+
+*Make sure you start the backend first*
+
+Once in frontend directory, after using ```> yarn install``` to install node modules, run ```> yarn dev``` to run the server. 
+Server should be running on [http://localhost:3000/](http://localhost:3000/).
+
+Frontend is pretty straight-forward, containing only 2 pages - index page and sensor details page.
+
+### Index
+
+On the index page you will find all of the sensors that are/have been active and have some data in the database. 
+
+By clicking on the sensors, you will be redirected to the sensors details page.
+
+### Sensor Details
+
+This page provides you with an option to:
+
+    - View any sensor details 
+    - Enable/disable the sensor
+    - View sensor log (history)
+    - View sensor data (live)
+
+
