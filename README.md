@@ -51,7 +51,7 @@ Once connected as a client using this websocket, (if the sensor is up and runnin
      
 ## Frontend
 
-1. To start the server...
+To start the server...
 
 *Make sure you start the backend first*
 
