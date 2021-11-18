@@ -64,7 +64,7 @@ sensorNamespace.on('connection', (socket) => {
           db.run(`INSERT INTO 
                   data (sensor_id, temperature, humidity, created_at) 
                   VALUES (?, ?, ?, ?)
-          `, [insert_data], (err) => {
+          `, [insert_data[0], insert_data[1], insert_data[2], insert_data[3]], (err) => {
               if (!err) {
                 // console.log('inserted into db')
 

@@ -1,11 +1,13 @@
+import Head from 'next/head'
+import styles from '../../styles/singleSensor.module.scss'
 import { useEffect, useState } from "react"
 import { io } from "socket.io-client";
+import Layout from "../../components/layout";
 import router from 'next/router'
-import { FiPower } from 'react-icons/fi'
-import { Line } from 'react-chartjs-2';
 import moment from 'moment';
-
-import styles from '../../styles/singleSensor.module.scss'
+import Log from "../../components/log";
+import Graph from "../../components/graph";
+import SensorDetails from "../../components/sensorDetails";
 
 export async function getServerSideProps(ctx) {
   const ctx_sensor = await fetch(`http://localhost:4000/api/sensors/${ctx.query.id}`).then(res => res.json())
@@ -18,12 +20,12 @@ export async function getServerSideProps(ctx) {
 }
 
 const NUMBER_OF_CHART_ITEMS = 10; // show last 20 items from sensor data
+// TODO: maybe make this a user selection?
 
 export default function SingleSensor({ ctx_sensor }) {
   const [sensor, setSensor] = useState(ctx_sensor)
   const [socket, setSocket] = useState()
   const [liveData, setLiveData] = useState()
-
   const [labelsLiveData, setLabelsLiveData] = useState([])
   const [tempLiveData, setTempLiveData] = useState([])
   const [humLiveData, setHumLiveData] = useState([])
@@ -35,7 +37,7 @@ export default function SingleSensor({ ctx_sensor }) {
         const labels = [];
         const humData = [];
         const tempData = [];
-        sensor.data.forEach((data) => {
+        sensor.data.map(data => {
           labels.push(moment(data.created_at).format('MMM Do HH:mm:ss'));
           tempData.push(data.temperature);
           humData.push(data.humidity);
@@ -63,16 +65,15 @@ export default function SingleSensor({ ctx_sensor }) {
         socket.on('web_getSensorsData', (newSensordata) => {
           // update components state
           const newLabels = labelsLiveData;
-
-          newLabels.push(moment(newSensordata.created_at).format('MMM Do HH:mm:ss'))
+          newLabels.unshift(moment(newSensordata.created_at).format('MMM Do HH:mm:ss'))
           setLabelsLiveData([...newLabels]);
           // for temp
           const newTempData = tempLiveData;
-          newTempData.push(newSensordata.temperature)
+          newTempData.unshift(newSensordata.temperature)
           setTempLiveData([...newTempData]);
           // for hum
           const newHumidityData = humLiveData;
-          newHumidityData.push(newSensordata.humidity)
+          newHumidityData.unshift(newSensordata.humidity)
           setHumLiveData([...newHumidityData]);
 
           setLiveData(newSensordata)
@@ -81,7 +82,7 @@ export default function SingleSensor({ ctx_sensor }) {
         socket.on('web_sensorStatusUpdate', (data) => {
           console.log('SensorStatusUpdate', data)
           let sen = data.filter(sen => sen.sensor_id == router.query.id)
-          if(sen.lenght !== 0){
+          if (sen.lenght !== 0) {
             setSensor({
               ...sensor,
               isActive: Boolean(sen[0].isActive)
@@ -94,6 +95,11 @@ export default function SingleSensor({ ctx_sensor }) {
         console.log(`Disconnected...`)
       })
     }
+    return () => {
+      handleSocketDisconnect()
+    }
+
+
   }, [socket])
 
   const handleSocketConnect = (id) => {
@@ -108,85 +114,60 @@ export default function SingleSensor({ ctx_sensor }) {
     socket?.disconnect()
   }
 
-  const handleSensorStatus = async () => {
-    const res = await fetch(`http://localhost:4000/api/sensors/${sensor.sensor_id}`, { method: "PUT" })
-    console.log(res.data)
+  const handleSensorStatus = () => {
+    fetch(`http://localhost:4000/api/sensors/${sensor.sensor_id}`, { method: "PUT" })
+
+  }
+
+  const handleRefresh = async () => {
+    const newData = await fetch(`http://localhost:4000/api/sensors/${sensor.sensor_id}`).then(res => res.json())
+    setSensor(newData)
   }
 
   const lineData = {
-    labels: labelsLiveData.slice(1).slice(-NUMBER_OF_CHART_ITEMS),
+    labels: labelsLiveData.slice(0, NUMBER_OF_CHART_ITEMS).reverse(),
     datasets: [
       {
         label: 'Temperature',
         backgroundColor: '#FF6384',
         borderColor: '#FF6384',
         fill: false,
-        data: tempLiveData.slice(1).slice(-NUMBER_OF_CHART_ITEMS)
+        data: tempLiveData.slice(0, NUMBER_OF_CHART_ITEMS).reverse()
       },
       {
         label: 'Humidity',
         backgroundColor: '#4BC0C0',
         borderColor: '#4BC0C0',
         fill: false,
-        data: humLiveData.slice(1).slice(-NUMBER_OF_CHART_ITEMS)
+        data: humLiveData.slice(0, NUMBER_OF_CHART_ITEMS).reverse()
       }
     ],
   }
 
   return (
-    <div className={'Shell'}>
-      <div className={styles.Content_wrapper}>
-        <h1>Sensor Details:</h1>
-        <div className={styles.Sensor_details}>
-          <h2>ID: {sensor.sensor_id}</h2>
-          <h2>Name: {sensor.name}</h2>
-          <FiPower
-            className={`${styles.Power} ${sensor?.isActive ? styles.On : styles.Off}`}
-            title={sensor?.isActive ? 'Turn Off' : 'Turn On'}
-            onClick={handleSensorStatus} />
+    <Layout>
+      <Head>
+        <title>{sensor?.name} | Details</title>
+        <meta name="description" content={`${sensor?.name} | Details`} />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      <div className={styles.Wrapper}>
+        <div className={'Shell'}>
+          <div className={styles.Inner}>
+            <div className={styles.Details}>
+              <SensorDetails
+                sensor={sensor}
+                handleSensorStatus={handleSensorStatus}
+                liveData={liveData} />
+              <Log
+                sensor={sensor}
+                handleRefresh={handleRefresh} />
+            </div>
+            <Graph lineData={lineData} />
+          </div>
         </div>
-        <h1>Live Readings:</h1>
-        {
-          sensor.isActive ?
-            <div className={styles.Readings}>
-              <span>Temperature : {liveData?.temperature}°</span>
-              <span>Humidity : {liveData?.humidity}%</span>
-            </div>
-            :
-            <div className={`${styles.Readings} ${styles.Inactive}`}>
-              <h1>Sensor is Inactive</h1>
-            </div>
-        }
       </div>
-      <div className={`${styles.Content_wrapper} ${styles.Charts_wrapper}`}>
-        <h1>Chart</h1>
-        <Line
-          data={{ ...lineData }}
-          options={{
-            plugins: {
-              title: {
-                display: true,
-                text: `Live Data for sensor id: ${sensor.sensor_id}`
-              }
-            },
-            scales: {
-              x: {
-                min: 0,
-                max: 100,
-              },
-              y: {
-                min: 0,
-                max: 60,
-              }
-            },
-            responsive: true,
-            
-          }}
-          width={400}
-          height={200}
-        /> 
-      </div>
-
-    </div>)
+    </Layout>
+  )
 }
 

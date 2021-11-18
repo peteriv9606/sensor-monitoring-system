@@ -1,6 +1,13 @@
+.Inner {
+  min-height: calc(100vh - 38px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .Sensors_wrapper {
-  margin: auto;
   padding: 20px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   border: 1px solid #ccc;
@@ -23,7 +30,7 @@
   align-items: center;
   justify-content: center;
   border-bottom: 1px solid #ccc;
-  >button{
+  > button {
     background-color: transparent;
     font-size: 20px;
   }
@@ -88,7 +95,6 @@
       min-width: 45px;
     }
   }
-
 }
 
 .Sensor:hover {
