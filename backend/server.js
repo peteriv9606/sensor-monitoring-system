@@ -39,6 +39,8 @@ sensorNamespace.on('connection', (socket) => {
     `, [data.id, data.name, 1, socket.id], (err) => {
       if (err) {
         // sensor already in DB
+      }else{
+        socket.broadcast.emit('web_sensorStatusUpdate', {id: data.id, isActive: 1})
       }
     })
   })

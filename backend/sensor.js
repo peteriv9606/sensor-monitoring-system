@@ -27,7 +27,6 @@ socket.on('connect', () => {
 
 socket.on('disconnect', () => {
   console.log('Socket closed')
-  socket.emit('sensorStatusChange', { id, name, isActive: 0 })
   process.exit()
 })
 
