@@ -1,6 +1,6 @@
 const io = require("socket.io-client");
 
-// get data from process.env 
+// get data from process.argv 
 const id = process.argv[2] || undefined
 const name = process.argv[3] || undefined
 

@@ -9,9 +9,7 @@ export const getServerSideProps = async () => {
   var sensorsSSR = null
   try {
     sensorsSSR = await fetch('http://localhost:4000/api/sensors').then(res => res.json())
-  } catch (error) {
-
-  }
+  } catch (error) { }
   return (
     {
       props: {

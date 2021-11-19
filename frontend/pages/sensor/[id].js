@@ -10,19 +10,26 @@ import Graph from "../../components/graph";
 import SensorDetails from "../../components/sensorDetails";
 
 export async function getServerSideProps(ctx) {
-  const ctx_sensor = await fetch(`http://localhost:4000/api/sensors/${ctx.query.id}`).then(res => res.json())
-
+  let ctx_sensor = null
+  let ctx_error = null
+  try {
+    ctx_sensor = await fetch(`http://localhost:4000/api/sensors/${ctx.query.id}`).then(res=>res.json())
+  } catch (error) {
+    ctx_error = error.code || '404 Not found'
+  }
   return ({
     props: {
-      ctx_sensor
+      ctx_sensor,
+      ctx_error
     }
   })
+
 }
 
-const NUMBER_OF_CHART_ITEMS = 10; // show last 20 items from sensor data
+const NUMBER_OF_CHART_ITEMS = 10; // show last 10 items from sensor data
 // TODO: maybe make this a user selection?
 
-export default function SingleSensor({ ctx_sensor }) {
+export default function SingleSensor({ ctx_sensor, ctx_error }) {
   const [sensor, setSensor] = useState(ctx_sensor)
   const [socket, setSocket] = useState()
   const [liveData, setLiveData] = useState()
@@ -31,7 +38,6 @@ export default function SingleSensor({ ctx_sensor }) {
   const [humLiveData, setHumLiveData] = useState([])
 
   useEffect(() => {
-    //console.log(sensor)
     if (sensor) {
       if (sensor?.data?.length > 0) {
         const labels = [];
@@ -98,8 +104,6 @@ export default function SingleSensor({ ctx_sensor }) {
     return () => {
       handleSocketDisconnect()
     }
-
-
   }, [socket])
 
   const handleSocketConnect = (id) => {
@@ -116,11 +120,11 @@ export default function SingleSensor({ ctx_sensor }) {
 
   const handleSensorStatus = () => {
     fetch(`http://localhost:4000/api/sensors/${sensor.sensor_id}`, { method: "PUT" })
-
   }
 
   const handleRefresh = async () => {
-    const newData = await fetch(`http://localhost:4000/api/sensors/${sensor.sensor_id}`).then(res => res.json())
+    const newData = await fetch(`http://localhost:4000/api/sensors/${sensor.sensor_id}`)
+      .then(res => res.json())
     setSensor(newData)
   }
 
@@ -154,16 +158,23 @@ export default function SingleSensor({ ctx_sensor }) {
       <div className={styles.Wrapper}>
         <div className={'Shell'}>
           <div className={styles.Inner}>
-            <div className={styles.Details}>
-              <SensorDetails
-                sensor={sensor}
-                handleSensorStatus={handleSensorStatus}
-                liveData={liveData} />
-              <Log
-                sensor={sensor}
-                handleRefresh={handleRefresh} />
-            </div>
-            <Graph lineData={lineData} />
+            {sensor ?
+              <>
+                <div className={styles.Details}>
+                  <SensorDetails
+                    sensor={sensor}
+                    handleSensorStatus={handleSensorStatus}
+                    liveData={liveData} />
+                  <Log
+                    sensor={sensor}
+                    handleRefresh={handleRefresh} />
+                </div>
+                <Graph lineData={lineData} />
+              </> : <>
+                <h1>An error occured while trying to fetch the data.</h1>
+                <h2>{ctx_error}</h2>
+              </>
+            }
           </div>
         </div>
       </div>
