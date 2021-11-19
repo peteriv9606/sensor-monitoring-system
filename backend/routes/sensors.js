@@ -60,8 +60,6 @@ router.put('/sensors/:id', (req, res) => {
     db.run(`UPDATE sensors SET isActive = ? WHERE sensor_id = ?`,
       [!Boolean(sensor.isActive), req.params.id], (err) => {
         if (err) return res.sendStatus(400)
-        // TODO:
-        // emit statusChange event
         const socket = io.connect(`http://localhost:4000/sensors/${req.params.id}/data/`, {
           reconnection: false
         })
@@ -69,7 +67,6 @@ router.put('/sensors/:id', (req, res) => {
           socket.emit('sensorStatusUpdate', { id: req.params.id, isActive: !sensor.isActive })
           socket.disconnect()
         })
-
         return res.status(200).json({'id': req.params.id, 'isActive': !sensor.isActive })
       })
   })

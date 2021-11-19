@@ -66,8 +66,7 @@ sensorNamespace.on('connection', (socket) => {
                   VALUES (?, ?, ?, ?)
           `, [insert_data[0], insert_data[1], insert_data[2], insert_data[3]], (err) => {
               if (!err) {
-                // console.log('inserted into db')
-
+                // inserted into db
                 // and send to clients if any
                 socket.broadcast.emit('web_getSensorsData', {
                   id: insert_data[0],
@@ -111,8 +110,6 @@ sensorNamespace.on('connection', (socket) => {
     })
   })
 })
-
-
 
 // ************************ regular endpoints ************************
 
